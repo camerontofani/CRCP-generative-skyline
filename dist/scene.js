@@ -1,3 +1,5 @@
+import { Building } from './building.js';
+//import { SceneElement } from './SceneElement';
 export class Scene {
     constructor(canvasId) {
         // elements: SceneElement[] = [];
@@ -57,6 +59,7 @@ export class Scene {
         //     this.ctx = ctx;
         //   }
         this.skyColor = 'blue';
+        this.buildings = [];
         const canvas = document.getElementById(canvasId);
         if (!canvas) {
             throw new Error('Canvas not found');
@@ -75,6 +78,17 @@ export class Scene {
             this.canvas.height = window.innerHeight;
             this.render(); // Re-render to adjust the scene
         });
+        this.generateBuildings();
+    }
+    generateBuildings() {
+        this.buildings = []; // Clear existing buildings
+        const numBuildings = Math.floor(window.innerWidth / 150); // Calculate the number of buildings based on screen width
+        for (let i = 0; i < numBuildings; i++) {
+            const x = i * 150 + Math.random() * 50; // Ensure buildings don't overlap too much
+            const y = this.canvas.height; // Base of the building
+            const building = new Building(x, y);
+            this.buildings.push(building);
+        }
     }
     //     // Render the scene with sky and buildings
     render() {
@@ -87,6 +101,7 @@ export class Scene {
         // Draw the sky
         this.ctx.fillStyle = this.skyColor; // Set sky color
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height); // Fill the background with sky color
+        this.buildings.forEach(building => building.display(this.ctx));
         // Draw each building
         // this.elements.forEach(element => element.display(this.ctx));  // Pass context to buildings for rendering
     }

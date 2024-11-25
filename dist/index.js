@@ -1,4 +1,5 @@
 import { Scene } from './scene.js';
+//import { Building } from './building.js';
 //console.log("Hello, Generative Art!");
 // // Create a scene
 // const scene = new Scene();
