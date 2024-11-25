@@ -67,6 +67,14 @@ export class Scene {
             throw new Error('Failed to get canvas context');
         }
         this.ctx = ctx;
+        //fill up entire screen, adjust with window:
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.render(); // Re-render to adjust the scene
+        });
     }
     //     // Render the scene with sky and buildings
     render() {
