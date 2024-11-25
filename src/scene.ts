@@ -1,6 +1,7 @@
-import { SceneElement } from './SceneElement.js'; 
-import { Building } from './building.js';
 
+
+import { Building } from './building.js';
+//import { SceneElement } from './SceneElement';
 
 export class Scene{
 
@@ -71,6 +72,7 @@ export class Scene{
     skyColor: string = 'blue'; 
     canvas: HTMLCanvasElement; 
     ctx: CanvasRenderingContext2D;
+    buildings: Building[] = [];
 
     constructor(canvasId: string) {
         const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -79,7 +81,34 @@ export class Scene{
 
         const ctx = this.canvas.getContext('2d');
         if (!ctx) { throw new Error('Failed to get canvas context'); }
-        this.ctx = ctx; }
+        this.ctx = ctx; 
+        
+        //fill up entire screen, adjust with window:
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.render(); // Re-render to adjust the scene
+        });
+
+        this.generateBuildings();
+    
+    }
+
+    generateBuildings(): void {
+        this.buildings = []; // Clear existing buildings
+        const numBuildings = Math.floor(window.innerWidth / 150); // Calculate the number of buildings based on screen width
+
+        for (let i = 0; i < numBuildings; i++) {
+            const x = i * 150 + Math.random() * 50; // Ensure buildings don't overlap too much
+            const y = this.canvas.height; // Base of the building
+            const building = new Building(x, y);
+            this.buildings.push(building);
+        }
+    }
+
 
 
     //     // Render the scene with sky and buildings
@@ -95,6 +124,8 @@ export class Scene{
             // Draw the sky
             this.ctx.fillStyle = this.skyColor;  // Set sky color
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);  // Fill the background with sky color
+            
+            this.buildings.forEach(building => building.display(this.ctx));
     
             // Draw each building
            // this.elements.forEach(element => element.display(this.ctx));  // Pass context to buildings for rendering
@@ -107,8 +138,4 @@ export class Scene{
     //     //     this.render();
     //     // }
 
-
-    
-    
-    
 }

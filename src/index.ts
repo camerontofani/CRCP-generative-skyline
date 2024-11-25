@@ -1,5 +1,5 @@
 import { Scene } from './scene.js'; 
-import { Building } from './building.js';
+//import { Building } from './building.js';
 
 //console.log("Hello, Generative Art!");
 
