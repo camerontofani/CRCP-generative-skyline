@@ -1,7 +1,7 @@
-import { Scene } from './scene'; 
-import { Building } from './building';
+import { Scene } from './scene.js'; 
+import { Building } from './building.js';
 
-console.log("Hello, Generative Art!");
+//console.log("Hello, Generative Art!");
 
 
 // // Create a scene
@@ -13,10 +13,10 @@ console.log("Hello, Generative Art!");
 // // Display the generated buildings
 // scene.display();
 
-const scene = new Scene();
+const scene = new Scene('skylineCanvas');
 scene.render();  // Render the initial scene
 
 // Add an event listener to the canvas to allow toggling between day and night on click
-document.getElementById('skylineCanvas')?.addEventListener('click', () => {
-    scene.toggleSky();  // Toggle between day and night sky
-});
+// document.getElementById('skylineCanvas')?.addEventListener('click', () => {
+//     scene.toggleSky();  // Toggle between day and night sky
+// });
