@@ -2,9 +2,25 @@
 //can always adjust 
 
 export class SceneElement {
+    // x: number; // x coord
+    // y: number; // y coord
+    // color: string; 
+
+    // constructor(x: number, y: number, color: string) {
+    //     this.x = x;
+    //     this.y = y;
+    //     this.color = color;
+    // }
+
+    // //display the element, override when we make actual elements
+    // //should be spesific to each element 
+    // display(): void {
+    //     console.log(`Display not implemented for ${this.constructor.name}`);
+    // }
+
     x: number; // x coord
     y: number; // y coord
-    color: string; 
+    color: string; // Color of the element
 
     constructor(x: number, y: number, color: string) {
         this.x = x;
@@ -12,9 +28,8 @@ export class SceneElement {
         this.color = color;
     }
 
-    //display the element, override when we make actual elements
-    //should be spesific to each element 
-    display(): void {
+    // display the element, override in subclasses to make the elements display properly
+    display(ctx: CanvasRenderingContext2D): void {
         console.log(`Display not implemented for ${this.constructor.name}`);
     }
 }
