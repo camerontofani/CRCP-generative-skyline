@@ -6,7 +6,7 @@ export class SceneElement {
         this.y = y;
         this.color = color;
     }
-    // Abstract method to display the element
+
     display(ctx) {
         console.log(`Display not implemented for ${this.constructor.name}`);
     }

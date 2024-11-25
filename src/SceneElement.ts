@@ -4,7 +4,7 @@
 export class SceneElement {
     x: number; // x coord
     y: number; // y coord
-    color: string; // Color of the element
+    color: string; // color of the element
   
     constructor(x: number, y: number, color: string) {
       this.x = x;

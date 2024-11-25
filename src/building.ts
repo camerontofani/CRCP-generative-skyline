@@ -7,18 +7,16 @@ export class Building extends SceneElement{
     width: number;  
 
     constructor(x: number, y: number) {
-        // Call the parent class (SceneElement) constructor
         super(x, y, `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`);
     
-        // Randomize width and height for the building
-        this.width = Math.random() * 150 + 50; // Random width between 50 and 200
-        this.height = Math.random() * 300 + 100; // Random height between 100 and 400
+        //random height and width
+        this.width = Math.random() * 150 + 50; 
+        this.height = Math.random() * 300 + 100; 
       }
     
-      // Override the display method to draw the building
       display(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y - this.height, this.width, this.height); // Draw a rectangle for the building
+        ctx.fillRect(this.x, this.y - this.height, this.width, this.height); //make rectangles for buildings
       }
     
 }
@@ -43,7 +41,6 @@ export class Building extends SceneElement{
     //     this.height = height;
     // }
 
-    // // Override display method to draw the building on the canvas
     // display(ctx: CanvasRenderingContext2D): void {
     //     ctx.fillStyle = this.color;  // Set the color for the building
     //     ctx.fillRect(this.x, this.y, this.width, this.height);  // Draw the building
