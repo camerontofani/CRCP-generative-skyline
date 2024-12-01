@@ -8,6 +8,7 @@ export class Building extends SceneElement {
         this.height = Math.random() * 300 + 100;
         const windowCount = Math.floor(Math.random() * 4); // a building can have between 0 and 3 windows
         this.windows = [];
+        const doorCount = Math.floor(Math.random() * 2); //only 0 or 1 door
         for (let i = 0; i < windowCount; i++) {
             const windowWidth = this.width / 5; // Make windows proportional to the building width
             const windowHeight = this.height / 10;
@@ -19,6 +20,14 @@ export class Building extends SceneElement {
             this.windows.push({ x: windowX, y: windowY, width: windowWidth, height: windowHeight });
             console.log(`Window ${i}: x=${windowX}, y=${windowY}, width=${windowWidth}, height=${windowHeight}`);
         }
+        this.doors = [];
+        for (let i = 0; i < doorCount; i++) {
+            const doorWidth = this.width / 4; // door width 
+            const doorHeight = 40; // fixed height for testing
+            const doorX = this.x + Math.random() * (this.width - doorWidth); // randomize x 
+            const doorY = this.y - this.height + this.height - doorHeight - 10; // low y so door is at bottom 
+            this.doors.push({ x: doorX, y: doorY, width: doorWidth, height: doorHeight });
+        }
     }
     display(ctx) {
         ctx.fillStyle = this.color;
@@ -27,26 +36,31 @@ export class Building extends SceneElement {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 8; //line thickness
         ctx.strokeRect(this.x, this.y - this.height, this.width, this.height); // draws outline
-        //  ctx.fillStyle = 'red';
-        //  ctx.fillRect(this.x + 10, this.y - this.height + 10, 20, 30);
-        ctx.fillStyle = 'white'; // Window color
-        ctx.strokeStyle = 'black'; // Window outline color
-        ctx.lineWidth = 2; // Thin outline for windows
+        ctx.fillStyle = 'white'; // window color
+        ctx.strokeStyle = 'black'; // window outline color
+        ctx.lineWidth = 2; // outline for windows
         for (const window of this.windows) {
-            ctx.fillRect(window.x, window.y, window.width, window.height); // Draw each window
-            ctx.strokeRect(window.x, window.y, window.width, window.height); // Add outline to windows
+            ctx.fillRect(window.x, window.y, window.width, window.height); // drawing window
+            ctx.strokeRect(window.x, window.y, window.width, window.height); // window outline
             const centerX = window.x + window.width / 2;
             const centerY = window.y + window.height / 2;
-            // Draw horizontal line of the cross
+            // horizontal line for window panes
             ctx.beginPath();
-            ctx.moveTo(window.x, centerY); // Start at the left side of the window
-            ctx.lineTo(window.x + window.width, centerY); // End at the right side
+            ctx.moveTo(window.x, centerY); // start left
+            ctx.lineTo(window.x + window.width, centerY); // end right
             ctx.stroke();
-            // Draw vertical line of the cross
+            // vertical line for the window panes
             ctx.beginPath();
-            ctx.moveTo(centerX, window.y); // Start at the top of the window
-            ctx.lineTo(centerX, window.y + window.height); // End at the bottom
+            ctx.moveTo(centerX, window.y); // start top
+            ctx.lineTo(centerX, window.y + window.height); // end bottom
             ctx.stroke();
+        }
+        ctx.fillStyle = 'brown'; //door color
+        for (const door of this.doors) {
+            ctx.fillRect(door.x, door.y, door.width, door.height); // draws door
+            ctx.strokeStyle = 'black'; //outline color
+            ctx.lineWidth = 2;
+            ctx.strokeRect(door.x, door.y, door.width, door.height); // door outline
         }
     }
 }
