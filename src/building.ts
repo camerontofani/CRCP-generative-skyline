@@ -1,5 +1,3 @@
-//import { SceneElement } from './SceneElement'; 
-
 import { SceneElement } from './SceneElement.js';
 
 export class Building extends SceneElement
@@ -82,7 +80,7 @@ export class Building extends SceneElement
             ctx.stroke();
         }
 
-        ctx.fillStyle = 'brown';  //door color
+        ctx.fillStyle = '#3E2B2B';  //door color
         for (const door of this.doors) 
         {
             ctx.fillRect(door.x, door.y, door.width, door.height); // draws door
@@ -93,28 +91,3 @@ export class Building extends SceneElement
       }
     
 }
-
-
-// constructor(x: number, y: number, color: string, width: number, height: number) {
-    //     super(x, y, color);  // Call the parent constructor
-    //     this.width = width;  // Store the width (size) of the building
-    //     this.height = height;  // Store the height of the building
-    // }
-
-    // display(): void {
-    //     console.log(`Displaying building at (${this.x}, ${this.y}) with color ${this.color}, width ${this.width}, and height ${this.height}`);
-    // }
-
-    // width: number;
-    // height: number;
-
-    // constructor(x: number, y: number, color: string, width: number, height: number) {
-    //     super(x, y, color);  // Call the parent class constructor
-    //     this.width = width;
-    //     this.height = height;
-    // }
-
-    // display(ctx: CanvasRenderingContext2D): void {
-    //     ctx.fillStyle = this.color;  // Set the color for the building
-    //     ctx.fillRect(this.x, this.y, this.width, this.height);  // Draw the building
-    // }

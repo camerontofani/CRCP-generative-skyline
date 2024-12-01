@@ -1,8 +1,8 @@
 import { Building } from './building.js';
 //import { SceneElement } from './SceneElement';
+import { Sky } from './sky.js';
 export class Scene {
     constructor(canvasId) {
-        this.skyColor = 'blue';
         this.buildings = [];
         const canvas = document.getElementById(canvasId);
         if (!canvas) {
@@ -22,7 +22,16 @@ export class Scene {
             this.canvas.height = window.innerHeight;
             this.render(); //this is so it adjusts with a new window sizing
         });
+        this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
         this.generateBuildings();
+        //for day/night difference
+        window.addEventListener('click', () => {
+            this.sky.isDay = !this.sky.isDay; // Toggle between day and night
+            this.sky.color = this.sky.isDay ? '#87CEEB' : 'black'; // Change sky color
+            // Regenerate buildings and reset sky for the new time of day
+            this.generateBuildings();
+            this.render(); // Re-render the scene after toggling the sky
+        });
     }
     generateBuildings() {
         this.buildings = []; //clear existing ones 
@@ -39,8 +48,9 @@ export class Scene {
     }
     display() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = this.skyColor; // Set sky color
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height); // Fill the background with sky color
+        //    this.ctx.fillStyle = this.skyColor;  // Set sky color
+        //    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);  // Fill the background with sky color
+        this.sky.render(this.ctx);
         this.buildings.forEach(building => building.display(this.ctx));
         // Draw each building
         // this.elements.forEach(element => element.display(this.ctx));  // Pass context to buildings for rendering
