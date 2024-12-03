@@ -35,9 +35,11 @@ export class Sky extends SceneElement
     {
         if (this.isDay) 
         {
+            this.stars = [];  // Clear stars
             this.generateClouds();  // Create new clouds for day
         } else 
         {
+            this.clouds = [];  // Clear clouds
             this.generateStars();  // Create new stars for night
         }
     }
@@ -100,6 +102,7 @@ export class Sky extends SceneElement
 
     render(ctx: CanvasRenderingContext2D): void 
     {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         this.display(ctx);  // Pass ctx to the display method
     }
 }
