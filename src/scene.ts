@@ -17,7 +17,7 @@ export class Scene {
 
         const ctx = this.canvas.getContext('2d');
         if (!ctx) { throw new Error('Failed to get canvas context'); }
-        this.ctx = ctx; 
+        this.ctx = ctx;
 
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
@@ -28,7 +28,7 @@ export class Scene {
             this.render();
         });
 
-        this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
+        this.sky = new Sky(0, 0, '#87CEEB', this.ctx); // Sky background color
         this.generateBuildings();
     }
 
@@ -37,7 +37,7 @@ export class Scene {
         const numBuildings = Math.floor(window.innerWidth / 150);
 
         for (let i = 0; i < numBuildings; i++) {
-            const x = i * 150 + Math.random() * 50; 
+            const x = i * 150 + Math.random() * 50;
             const y = this.canvas.height;
             const building = new Building(x, y);
             this.buildings.push(building);

@@ -1,15 +1,19 @@
 import { SceneElement } from './SceneElement.js';
 
 export class Sky extends SceneElement {
-    clouds: { x: number, y: number, size: number, puffCount: number }[]; 
-    sun: { x: number, y: number, radius: number } = { x: window.innerWidth / 2, y: window.innerHeight / 4, radius: 100 }; // Position and size of the sun
+    clouds: { x: number, y: number, size: number, puffCount: number }[];
+    sun: { x: number, y: number, radius: number } = { x: 0, y: 0, radius: 100 }; // Sun default position
     ctx: CanvasRenderingContext2D | null = null;
 
     constructor(x: number, y: number, color: string, ctx: CanvasRenderingContext2D) {
         super(x, y, color);
         this.clouds = [];
         this.generateClouds();
-        this.ctx = ctx; 
+        this.ctx = ctx;
+
+        // Default sun position to be the center of the canvas
+        this.sun.x = window.innerWidth / 2;
+        this.sun.y = window.innerHeight / 4;
 
         // Add click event for the sun to trigger a visual effect
         window.addEventListener('click', (event) => {
