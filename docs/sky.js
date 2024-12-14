@@ -2,75 +2,83 @@ import { SceneElement } from './SceneElement.js';
 export class Sky extends SceneElement {
     constructor(x, y, color, ctx) {
         super(x, y, color);
-        this.ctx = null; // Add ctx property
-        this.isDay = true; // Default to day
+        this.sun = { x: 0, y: 0, radius: 100 }; // Sun default position
+        this.ctx = null;
         this.clouds = [];
-        this.stars = [];
         this.generateClouds();
-        this.generateStars();
-        this.ctx = ctx; // Set ctx from constructor
-        // Add event listener for clicks to toggle day/night
-        window.addEventListener('click', () => {
-            this.isDay = !this.isDay; // Toggle day/night
-            this.color = this.isDay ? 'blue' : 'black'; // Update sky color
-            if (this.ctx) {
-                this.resetSky();
-                this.render(this.ctx); // Pass ctx to render
+        this.ctx = ctx;
+        // Default sun position to be the center of the canvas
+        this.sun.x = window.innerWidth / 2;
+        this.sun.y = window.innerHeight / 4;
+        // Add click event for the sun to trigger a visual effect
+        window.addEventListener('click', (event) => {
+            const distance = Math.sqrt(Math.pow(event.clientX - this.sun.x, 2) + Math.pow(event.clientY - this.sun.y, 2));
+            if (distance < this.sun.radius) {
+                this.triggerSunEffect();
             }
         });
     }
-    resetSky() {
-        if (this.isDay) {
-            this.generateClouds(); // Create new clouds for day
-        }
-        else {
-            this.generateStars(); // Create new stars for night
-        }
-    }
     generateClouds() {
+        this.clouds = [];
         for (let i = 0; i < 5; i++) {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight / 2;
-            const size = Math.random() * 50 + 30;
-            this.clouds.push({ x, y, size });
-        }
-    }
-    generateStars() {
-        for (let i = 0; i < 100; i++) {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            const size = Math.random() * 2 + 1;
-            this.stars.push({ x, y, size });
-        }
-    }
-    display(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-        if (this.isDay) {
-            this.displayClouds(ctx);
-        }
-        else {
-            this.displayStars(ctx);
+            const size = Math.random() * 80 + 30;
+            const puffCount = Math.floor(Math.random() * 3) + 3; // 3 to 5 puffs per cloud
+            this.clouds.push({ x, y, size, puffCount });
         }
     }
     displayClouds(ctx) {
         ctx.fillStyle = 'white';
         this.clouds.forEach(cloud => {
-            ctx.beginPath();
-            ctx.arc(cloud.x, cloud.y, cloud.size, 0, Math.PI * 2);
-            ctx.fill();
+            const { x, y, size, puffCount } = cloud;
+            for (let i = 0; i < puffCount; i++) {
+                const offsetX = (Math.random() - 0.5) * size;
+                const offsetY = (Math.random() - 0.5) * size / 2;
+                const puffSize = size * (0.6 + Math.random() * 0.4); // random puff size
+                ctx.beginPath();
+                ctx.arc(x + offsetX, y + offsetY, puffSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
         });
     }
-    displayStars(ctx) {
-        ctx.fillStyle = 'white';
-        this.stars.forEach(star => {
-            ctx.beginPath();
-            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-            ctx.fill();
-        });
+    // Draw the sun
+    displaySun(ctx) {
+        ctx.fillStyle = 'yellow';
+        ctx.beginPath();
+        ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    // Add rays of sunlight when the user clicks the sun
+    triggerSunEffect() {
+        if (this.ctx) {
+            const ctx = this.ctx;
+            ctx.strokeStyle = 'yellow';
+            ctx.lineWidth = 2;
+            // Draw rays extending outward from the sun
+            for (let i = 0; i < 12; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const length = Math.random() * 100 + 50;
+                const startX = this.sun.x + Math.cos(angle) * this.sun.radius;
+                const startY = this.sun.y + Math.sin(angle) * this.sun.radius;
+                const endX = this.sun.x + Math.cos(angle) * (this.sun.radius + length);
+                const endY = this.sun.y + Math.sin(angle) * (this.sun.radius + length);
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.stroke();
+            }
+        }
+    }
+    display(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        this.displayClouds(ctx);
+        this.displaySun(ctx);
     }
     render(ctx) {
-        this.display(ctx); // Pass ctx to the display method
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        this.display(ctx);
     }
 }
 //# sourceMappingURL=sky.js.map
