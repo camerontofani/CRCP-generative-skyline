@@ -32,8 +32,10 @@ export class Scene {
 
         // For day/night difference
         window.addEventListener('click', () => {
+            console.log('Canvas clicked! Toggling day/night.');
             this.sky.isDay = !this.sky.isDay;  // Toggle between day and night
             this.sky.color = this.sky.isDay ? '#87CEEB' : 'black';  // Change sky color
+            console.log(`isDay: ${this.sky.isDay}, color: ${this.sky.color}`);
 
             // Regenerate buildings and reset sky for the new time of day
             this.generateBuildings();
@@ -64,4 +66,5 @@ export class Scene {
         this.buildings.forEach(building => building.display(this.ctx)); // Draw each building
     }
 }
+
 
