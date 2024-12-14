@@ -57,15 +57,22 @@ export class Sky extends SceneElement
 
     generateClouds(): void 
     {
-        for (let i = 0; i < 5; i++) 
-        {
+        this.clouds = []; // reset clouds array
+        for (let i = 0; i < 5; i++) {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight / 2;
             const size = Math.random() * 50 + 30;
-            const puffCount = Math.floor(Math.random() * 3) + 3; // random number of puffs
-            this.clouds.push({ x, y, size, puffCount });
+            const puffCount = Math.floor(Math.random() * 3) + 3; // 3 to 5 puffs per cloud
+            this.clouds.push({ x, y, size, puffCount }); // puffCount
         }
+        this.clouds.forEach(cloud => 
+        {
+            console.log('Cloud:', cloud); // error handling, checking each cloud's properties
+        });
+        
+
     }
+    
 
 
     generateStars(): void 
@@ -107,21 +114,21 @@ export class Sky extends SceneElement
     {
         ctx.fillStyle = 'white';
         this.clouds.forEach(cloud => 
-        {
-            const { x, y, size } = cloud;
-            const puffCount = 5; // trying to add puffs to the clouds so they aren't circles; testing 5 per cloud
-
-            for (let i = 0; i < puffCount; i++) 
+            {
+                const { x, y, size, puffCount } = cloud;
+    
+                for (let i = 0; i < puffCount; i++) 
             {
                 const offsetX = (Math.random() - 0.5) * size;
                 const offsetY = (Math.random() - 0.5) * size / 2;
-                const puffSize = size * (0.6 + Math.random() * 0.4); // okay the puffs should be different sizes
+                const puffSize = size * (0.6 + Math.random() * 0.4); // random puff size
                 ctx.beginPath();
                 ctx.arc(x + offsetX, y + offsetY, puffSize, 0, Math.PI * 2);
                 ctx.fill();
             }
         });
     }
+    
 
 
     displayStars(ctx: CanvasRenderingContext2D): void 
