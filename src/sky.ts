@@ -3,7 +3,8 @@ import { SceneElement } from './SceneElement.js';
 export class Sky extends SceneElement
 {
     isDay: boolean;
-    clouds: { x: number, y: number, size: number }[];
+    // clouds: { x: number, y: number, size: number }[];
+    clouds: { x: number, y: number, size: number, puffCount: number }[]; 
     stars: { x: number, y: number, size: number }[];
     ctx: CanvasRenderingContext2D | null = null;  //  ctx property
 
@@ -44,15 +45,28 @@ export class Sky extends SceneElement
         }
     }
 
+    // generateClouds(): void 
+    // {
+    //     for (let i = 0; i < 5; i++) {
+    //         const x = Math.random() * window.innerWidth;
+    //         const y = Math.random() * window.innerHeight / 2;
+    //         const size = Math.random() * 50 + 30;
+    //         this.clouds.push({ x, y, size });
+    //     }
+    // }
+
     generateClouds(): void 
     {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) 
+        {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight / 2;
             const size = Math.random() * 50 + 30;
-            this.clouds.push({ x, y, size });
+            const puffCount = Math.floor(Math.random() * 3) + 3; // random number of puffs
+            this.clouds.push({ x, y, size, puffCount });
         }
     }
+
 
     generateStars(): void 
     {
