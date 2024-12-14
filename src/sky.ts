@@ -5,28 +5,28 @@ export class Sky extends SceneElement
     isDay: boolean;
     clouds: { x: number, y: number, size: number }[];
     stars: { x: number, y: number, size: number }[];
-    ctx: CanvasRenderingContext2D | null = null;  // Add ctx property
+    ctx: CanvasRenderingContext2D | null = null;  //  ctx property
 
     constructor(x: number, y: number, color: string, ctx: CanvasRenderingContext2D) 
     {
         super(x, y, color);
-        this.isDay = true;  // Default to day
+        this.isDay = true;  // default to day
         this.clouds = [];
         this.stars = [];
         this.generateClouds();
         this.generateStars();
-        this.ctx = ctx;  // Set ctx from constructor
+        this.ctx = ctx;  //  ctx from constructor
 
-        // Add event listener for clicks to toggle day/night
+        // this handles clicks which should correspond to day/night cycle
         window.addEventListener('click', () => 
         {
-            this.isDay = !this.isDay;  // Toggle day/night
-            this.color = this.isDay ? 'blue' : 'black';  // Update sky color
+            this.isDay = !this.isDay;  //  day/night
+            this.color = this.isDay ? 'blue' : 'black';  // changes sky color
 
             if (this.ctx) 
             {
                 this.resetSky();
-                this.render(this.ctx);  // Pass ctx to render
+                this.render(this.ctx); 
             }
         });
     }
@@ -35,12 +35,12 @@ export class Sky extends SceneElement
     {
         if (this.isDay) 
         {
-            this.stars = [];  // Clear stars
-            this.generateClouds();  // Create new clouds for day
+            this.stars = [];  // clear stars
+            this.generateClouds();  //  new clouds for day
         } else 
         {
-            this.clouds = [];  // Clear clouds
-            this.generateStars();  // Create new stars for night
+            this.clouds = [];  // clear clouds
+            this.generateStars();  //  new stars for night
         }
     }
 
@@ -78,16 +78,37 @@ export class Sky extends SceneElement
         }
     }
 
+    // displayClouds(ctx: CanvasRenderingContext2D): void 
+    // {
+    //     ctx.fillStyle = 'white';
+    //     this.clouds.forEach(cloud => 
+    //         {
+    //         ctx.beginPath();
+    //         ctx.arc(cloud.x, cloud.y, cloud.size, 0, Math.PI * 2);
+    //         ctx.fill();
+    //     });
+    // }
+
     displayClouds(ctx: CanvasRenderingContext2D): void 
     {
         ctx.fillStyle = 'white';
         this.clouds.forEach(cloud => 
+        {
+            const { x, y, size } = cloud;
+            const puffCount = 5; // trying to add puffs to the clouds so they aren't circles; testing 5 per cloud
+
+            for (let i = 0; i < puffCount; i++) 
             {
-            ctx.beginPath();
-            ctx.arc(cloud.x, cloud.y, cloud.size, 0, Math.PI * 2);
-            ctx.fill();
+                const offsetX = (Math.random() - 0.5) * size;
+                const offsetY = (Math.random() - 0.5) * size / 2;
+                const puffSize = size * (0.6 + Math.random() * 0.4); // okay the puffs should be different sizes
+                ctx.beginPath();
+                ctx.arc(x + offsetX, y + offsetY, puffSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
         });
     }
+
 
     displayStars(ctx: CanvasRenderingContext2D): void 
     {
@@ -103,7 +124,7 @@ export class Sky extends SceneElement
     render(ctx: CanvasRenderingContext2D): void 
     {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-        this.display(ctx);  // Pass ctx to the display method
+        this.display(ctx); 
     }
 }
 
