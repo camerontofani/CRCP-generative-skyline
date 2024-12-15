@@ -2,15 +2,15 @@ import { SceneElement } from './SceneElement.js';
 export class Sky extends SceneElement {
     constructor(x, y, color, ctx) {
         super(x, y, color);
-        this.sun = { x: 0, y: 0, radius: 100 }; // Sun default position
+        this.sun = { x: 0, y: 0, radius: 100 }; // stuff for sun
         this.ctx = null;
         this.clouds = [];
         this.generateClouds();
         this.ctx = ctx;
-        // Default sun position to be the center of the canvas
+        // okay right now sun is in middle of canvas
         this.sun.x = window.innerWidth / 2;
         this.sun.y = window.innerHeight / 4;
-        // Add click event for the sun to trigger a visual effect
+        // sun click event
         window.addEventListener('click', (event) => {
             const distance = Math.sqrt(Math.pow(event.clientX - this.sun.x, 2) + Math.pow(event.clientY - this.sun.y, 2));
             if (distance < this.sun.radius) {
@@ -42,20 +42,19 @@ export class Sky extends SceneElement {
             }
         });
     }
-    // Draw the sun
     displaySun(ctx) {
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
         ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);
         ctx.fill();
     }
-    // Add rays of sunlight when the user clicks the sun
+    // when user clicks, add rays of sunlight
     triggerSunEffect() {
         if (this.ctx) {
             const ctx = this.ctx;
             ctx.strokeStyle = 'yellow';
             ctx.lineWidth = 2;
-            // Draw rays extending outward from the sun
+            // rays of light that come from the sun
             for (let i = 0; i < 12; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const length = Math.random() * 100 + 50;

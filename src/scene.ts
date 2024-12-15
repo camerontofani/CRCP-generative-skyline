@@ -9,107 +9,66 @@ export class Scene {
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     buildings: Building[] = [];
-    sun: { x: number, y: number, radius: number }; // stuff for the sun
 
-    constructor(canvasId: string) 
-    {
+    constructor(canvasId: string) {
         const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-        if (!canvas) { throw new Error('Canvas not found'); }
+        if (!canvas) throw new Error('Canvas not found');
         this.canvas = canvas;
 
         const ctx = this.canvas.getContext('2d');
-        if (!ctx) { throw new Error('Failed to get canvas context'); }
+        if (!ctx) throw new Error('Failed to get canvas context');
         this.ctx = ctx;
 
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
-        window.addEventListener('resize', () => 
-        {
+        window.addEventListener('resize', () => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            this.render(); 
+            this.render(); // Re-render on resize
         });
 
         this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
+        this.generateBuildings(); // Generate buildings on initialization
 
-        // sun size
-        this.sun = { x: window.innerWidth / 2, y: window.innerHeight / 4, radius: 40 };
+        // Listen for clicks to trigger effects
+        window.addEventListener('click', (event: MouseEvent) => {
+            const distance = Math.sqrt(
+                Math.pow(event.clientX - this.sky.sun.x, 2) + Math.pow(event.clientY - this.sky.sun.y, 2)
+            );
 
-        this.generateBuildings(); 
-
-        window.addEventListener('click', (event: MouseEvent) => 
-        {
-            // if the sun is clicked
-            const distance = Math.sqrt(Math.pow(event.clientX - this.sun.x, 2) + Math.pow(event.clientY - this.sun.y, 2));
-            if (distance <= this.sun.radius) 
-            {
-                // create rays of light 
-                this.generateRaysOfLight(event.clientX, event.clientY);
-
-                // also generate buildings when the sun is clicked
-                this.generateBuildings();
+            if (distance <= this.sky.sun.radius) {
+                // If the sun is clicked
+                this.sky.triggerSunEffect();
+                this.generateBuildings(); // Generate new buildings when the sun is clicked
             }
-            this.render(); // re render
+            this.render(); // Re-render after the click
         });
     }
 
-    generateBuildings(): void 
-    {
-        this.buildings = []; // Clear existing 
-        const numBuildings = Math.floor(window.innerWidth / 150); // buildings based on screen width
+    generateBuildings(): void {
+        this.buildings = []; // Clear existing buildings
+        const numBuildings = Math.floor(window.innerWidth / 150); // Adjust based on screen width
 
-        for (let i = 0; i < numBuildings; i++) 
-        {
+        for (let i = 0; i < numBuildings; i++) {
             const x = i * 150 + Math.random() * 50;
-            const y = this.canvas.height; 
+            const y = this.canvas.height;
             const building = new Building(x, y);
             this.buildings.push(building);
         }
     }
 
-    generateRaysOfLight(sunX: number, sunY: number): void 
-    {
-        // generate rays of light from the sun
-        const raysCount = 12; // number of rays
-        const rayLength = 200; // length
-        const rayAngleInterval = (Math.PI * 2) / raysCount;
-
-        this.ctx.strokeStyle = 'yellow';
-        this.ctx.lineWidth = 2;
-
-        for (let i = 0; i < raysCount; i++) 
-        {
-            const angle = i * rayAngleInterval;
-            const rayX = sunX + Math.cos(angle) * rayLength;
-            const rayY = sunY + Math.sin(angle) * rayLength;
-
-            this.ctx.beginPath();
-            this.ctx.moveTo(sunX, sunY);
-            this.ctx.lineTo(rayX, rayY);
-            this.ctx.stroke();
-        }
-    }
-
-    render(): void 
-    {
+    render(): void {
         this.display();
     }
 
-    display(): void 
-    {
+    display(): void {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        //  sky
+        // Render sky
         this.sky.render(this.ctx);
 
-        //  buildings
+        // Render buildings
         this.buildings.forEach(building => building.display(this.ctx));
-
-        //  sun
-        this.ctx.fillStyle = 'yellow';
-        this.ctx.beginPath();
-        this.ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);
-        this.ctx.fill();
     }
 }

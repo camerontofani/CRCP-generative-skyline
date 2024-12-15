@@ -19,38 +19,38 @@ export class Scene {
         window.addEventListener('resize', () => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            this.render(); // Adjust when resizing window
+            this.render();
         });
         this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
-        // Set the sun to be slightly smaller
+        // sun size
         this.sun = { x: window.innerWidth / 2, y: window.innerHeight / 4, radius: 40 };
-        this.generateBuildings(); // Initially generate buildings
+        this.generateBuildings();
         window.addEventListener('click', (event) => {
-            // Check if the sun is clicked
+            // if the sun is clicked
             const distance = Math.sqrt(Math.pow(event.clientX - this.sun.x, 2) + Math.pow(event.clientY - this.sun.y, 2));
             if (distance <= this.sun.radius) {
-                // Generate rays of light when the sun is clicked
+                // create rays of light 
                 this.generateRaysOfLight(event.clientX, event.clientY);
-                // Also generate buildings when the sun is clicked
+                // also generate buildings when the sun is clicked
                 this.generateBuildings();
             }
-            this.render(); // Re-render the scene
+            this.render(); // re render
         });
     }
     generateBuildings() {
-        this.buildings = []; // Clear existing buildings
-        const numBuildings = Math.floor(window.innerWidth / 150); // Number of buildings based on screen width
+        this.buildings = []; // Clear existing 
+        const numBuildings = Math.floor(window.innerWidth / 150); // buildings based on screen width
         for (let i = 0; i < numBuildings; i++) {
             const x = i * 150 + Math.random() * 50;
-            const y = this.canvas.height; // Base height
+            const y = this.canvas.height;
             const building = new Building(x, y);
             this.buildings.push(building);
         }
     }
     generateRaysOfLight(sunX, sunY) {
-        // Generate rays of light from the sun
-        const raysCount = 12; // Number of rays
-        const rayLength = 200; // Length of each ray
+        // generate rays of light from the sun
+        const raysCount = 12; // number of rays
+        const rayLength = 200; // length
         const rayAngleInterval = (Math.PI * 2) / raysCount;
         this.ctx.strokeStyle = 'yellow';
         this.ctx.lineWidth = 2;
@@ -69,11 +69,11 @@ export class Scene {
     }
     display() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        // Render the sky
+        //  sky
         this.sky.render(this.ctx);
-        // Render the buildings
+        //  buildings
         this.buildings.forEach(building => building.display(this.ctx));
-        // Render the sun
+        //  sun
         this.ctx.fillStyle = 'yellow';
         this.ctx.beginPath();
         this.ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);

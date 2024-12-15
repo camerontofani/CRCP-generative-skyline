@@ -2,36 +2,33 @@ import { SceneElement } from './SceneElement.js';
 
 export class Sky extends SceneElement {
     clouds: { x: number, y: number, size: number, puffCount: number }[];
-    sun: { x: number, y: number, radius: number } = { x: 0, y: 0, radius: 100 }; // stuff for sun
+    sun: { x: number, y: number, radius: number } = { x: 0, y: 0, radius: 80 }; // Smaller sun size
     ctx: CanvasRenderingContext2D | null = null;
 
-    constructor(x: number, y: number, color: string, ctx: CanvasRenderingContext2D) 
-    {
+    constructor(x: number, y: number, color: string, ctx: CanvasRenderingContext2D) {
         super(x, y, color);
         this.clouds = [];
         this.generateClouds();
         this.ctx = ctx;
 
-        // okay right now sun is in middle of canvas
+        // Place sun at the middle of the canvas
         this.sun.x = window.innerWidth / 2;
         this.sun.y = window.innerHeight / 4;
 
-        // sun click event
-        window.addEventListener('click', (event) => 
-        {
-            const distance = Math.sqrt(Math.pow(event.clientX - this.sun.x, 2) + Math.pow(event.clientY - this.sun.y, 2));
-            if (distance < this.sun.radius) 
-            {
+        // Sun click event
+        window.addEventListener('click', (event) => {
+            const distance = Math.sqrt(
+                Math.pow(event.clientX - this.sun.x, 2) + Math.pow(event.clientY - this.sun.y, 2)
+            );
+            if (distance < this.sun.radius) {
                 this.triggerSunEffect();
             }
         });
     }
 
-    generateClouds(): void 
-    {
-        this.clouds = [];
-        for (let i = 0; i < 5; i++) 
-        {
+    generateClouds(): void {
+        this.clouds = []; // Clouds are generated only once
+        for (let i = 0; i < 5; i++) {
             const x = Math.random() * window.innerWidth;
             const y = Math.random() * window.innerHeight / 2;
             const size = Math.random() * 80 + 30;
@@ -40,18 +37,15 @@ export class Sky extends SceneElement {
         }
     }
 
-    displayClouds(ctx: CanvasRenderingContext2D): void 
-    {
+    displayClouds(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = 'white';
-        this.clouds.forEach(cloud => 
-        {
+        this.clouds.forEach(cloud => {
             const { x, y, size, puffCount } = cloud;
 
-            for (let i = 0; i < puffCount; i++) 
-            {
+            for (let i = 0; i < puffCount; i++) {
                 const offsetX = (Math.random() - 0.5) * size;
                 const offsetY = (Math.random() - 0.5) * size / 2;
-                const puffSize = size * (0.6 + Math.random() * 0.4); // random puff size
+                const puffSize = size * (0.6 + Math.random() * 0.4); // Random puff size
                 ctx.beginPath();
                 ctx.arc(x + offsetX, y + offsetY, puffSize, 0, Math.PI * 2);
                 ctx.fill();
@@ -59,25 +53,21 @@ export class Sky extends SceneElement {
         });
     }
 
-    displaySun(ctx: CanvasRenderingContext2D): void 
-    {
+    displaySun(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
         ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);
         ctx.fill();
     }
 
-    // when user clicks, add rays of sunlight
-    triggerSunEffect(): void 
-    {
+    triggerSunEffect(): void {
         if (this.ctx) {
             const ctx = this.ctx;
             ctx.strokeStyle = 'yellow';
             ctx.lineWidth = 2;
 
-            // rays of light that come from the sun
-            for (let i = 0; i < 12; i++) 
-            {
+            // Rays of light coming from the sun
+            for (let i = 0; i < 12; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const length = Math.random() * 100 + 50;
                 const startX = this.sun.x + Math.cos(angle) * this.sun.radius;
@@ -93,8 +83,7 @@ export class Sky extends SceneElement {
         }
     }
 
-    display(ctx: CanvasRenderingContext2D): void 
-    {
+    display(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -102,8 +91,7 @@ export class Sky extends SceneElement {
         this.displaySun(ctx);
     }
 
-    render(ctx: CanvasRenderingContext2D): void 
-    {
+    render(ctx: CanvasRenderingContext2D): void {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         this.display(ctx);
     }
