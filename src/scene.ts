@@ -12,11 +12,15 @@ export class Scene {
 
     constructor(canvasId: string) {
         const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-        if (!canvas) throw new Error('Canvas not found');
+        if (!canvas) {
+            throw new Error('Canvas not found');
+        }
         this.canvas = canvas;
 
         const ctx = this.canvas.getContext('2d');
-        if (!ctx) throw new Error('Failed to get canvas context');
+        if (!ctx) {
+            throw new Error('Failed to get canvas context');
+        }
         this.ctx = ctx;
 
         this.canvas.width = window.innerWidth;
@@ -28,27 +32,19 @@ export class Scene {
             this.render();
         });
 
-        this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
-        this.generateBuildings();
-
-        // Click event handler
-        window.addEventListener('click', (event: MouseEvent) => {
-            const distance = Math.sqrt(
-                Math.pow(event.clientX - this.sky.sun.x, 2) + Math.pow(event.clientY - this.sky.sun.y, 2)
-            );
-
-            if (distance <= this.sky.sun.radius) {
-                // Sun click: move clouds and regenerate buildings
-                this.sky.moveClouds();
-                this.generateBuildings();
-            }
+        window.addEventListener('sunClicked', () => {
+            this.generateBuildings(); // Regenerate buildings when sun is clicked
+            this.sky.generateClouds(); // Regenerate clouds when sun is clicked
             this.render();
         });
+
+        this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
+        this.generateBuildings();
     }
 
     generateBuildings(): void {
-        this.buildings = []; // Clear existing buildings
-        const numBuildings = Math.floor(window.innerWidth / 150); // Adjust based on screen width
+        this.buildings = [];
+        const numBuildings = Math.floor(window.innerWidth / 150);
 
         for (let i = 0; i < numBuildings; i++) {
             const x = i * 150 + Math.random() * 50;
@@ -64,11 +60,7 @@ export class Scene {
 
     display(): void {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Render sky
         this.sky.render(this.ctx);
-
-        // Render buildings
-        this.buildings.forEach(building => building.display(this.ctx));
+        this.buildings.forEach((building) => building.display(this.ctx));
     }
 }
