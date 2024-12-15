@@ -23,20 +23,15 @@ export class Building extends SceneElement
         {
             const windowWidth = this.width / 5; // Make windows proportional to the building width
             const windowHeight = this.height / 10;
-           // const windowX = this.x + Math.random() * (this.width - windowWidth);
-          //  const windowY = this.y - this.height + Math.random() * (this.height - windowHeight - 10);
-          //  this.windows.push({ x: windowX, y: windowY, width: windowWidth, height: windowHeight });
 
-
-          const windowX = this.x + Math.random() * (this.width - windowWidth);
-          const windowY = this.y - this.height + 10 + (i * (windowHeight + 10));
-          this.windows.push({ x: windowX, y: windowY, width: windowWidth, height: windowHeight });
-           
-          console.log(`Window ${i}: x=${windowX}, y=${windowY}, width=${windowWidth}, height=${windowHeight}`);
+            const windowX = this.x + Math.random() * (this.width - windowWidth);
+            const windowY = this.y - this.height + 10 + (i * (windowHeight + 10));
+            this.windows.push({ x: windowX, y: windowY, width: windowWidth, height: windowHeight });
         }
 
         this.doors = [];
-        for (let i = 0; i < doorCount; i++) {
+        for (let i = 0; i < doorCount; i++) 
+        {
             const doorWidth = this.width / 4;  // door width 
             const doorHeight = 40;  // fixed height for testing
             const doorX = this.x + Math.random() * (this.width - doorWidth);  // randomize x 
@@ -80,7 +75,7 @@ export class Building extends SceneElement
             ctx.stroke();
         }
 
-        ctx.fillStyle = '#3E2B2B';  //door color
+        ctx.fillStyle = '#3E2B2B';  //door color, dark brown
         for (const door of this.doors) 
         {
             ctx.fillRect(door.x, door.y, door.width, door.height); // draws door
