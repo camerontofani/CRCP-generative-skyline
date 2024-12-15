@@ -4,7 +4,6 @@ export class Sky extends SceneElement {
     clouds: { x: number, y: number, size: number, puffCount: number }[];
     sun: { x: number, y: number, radius: number } = { x: 0, y: 0, radius: 80 };
     ctx: CanvasRenderingContext2D | null = null;
-    sunRays: { angle: number; length: number }[] = []; // Store ray data for rendering
 
     constructor(x: number, y: number, color: string, ctx: CanvasRenderingContext2D) {
         super(x, y, color);
@@ -54,37 +53,29 @@ export class Sky extends SceneElement {
     }
 
     displaySun(ctx: CanvasRenderingContext2D): void {
+        // Draw sun
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
         ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Display rays if present
-        if (this.sunRays.length > 0) {
+        // Draw rays
+        const rayLengths = [120, 80]; // Alternate between long and short rays
+        for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4; // Divide full circle into 8 equal parts
+            const length = rayLengths[i % 2];
+            const startX = this.sun.x + Math.cos(angle) * this.sun.radius;
+            const startY = this.sun.y + Math.sin(angle) * this.sun.radius;
+            const endX = this.sun.x + Math.cos(angle) * (this.sun.radius + length);
+            const endY = this.sun.y + Math.sin(angle) * (this.sun.radius + length);
+
             ctx.strokeStyle = 'yellow';
-            ctx.lineWidth = 2;
-            this.sunRays.forEach(ray => {
-                const startX = this.sun.x + Math.cos(ray.angle) * this.sun.radius;
-                const startY = this.sun.y + Math.sin(ray.angle) * this.sun.radius;
-                const endX = this.sun.x + Math.cos(ray.angle) * (this.sun.radius + ray.length);
-                const endY = this.sun.y + Math.sin(ray.angle) * (this.sun.radius + ray.length);
-
-                ctx.beginPath();
-                ctx.moveTo(startX, startY);
-                ctx.lineTo(endX, endY);
-                ctx.stroke();
-            });
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
         }
-    }
-
-    triggerSunEffect(): void {
-        this.sunRays = []; // Reset rays
-        for (let i = 0; i < 12; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const length = Math.random() * 100 + 50;
-            this.sunRays.push({ angle, length });
-        }
-        this.moveClouds(); // Optional: Move clouds
     }
 
     display(ctx: CanvasRenderingContext2D): void {

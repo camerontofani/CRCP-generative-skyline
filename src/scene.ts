@@ -38,8 +38,8 @@ export class Scene {
             );
 
             if (distance <= this.sky.sun.radius) {
-                // Sun click: trigger sun rays, regenerate buildings, optionally move clouds
-                this.sky.triggerSunEffect();
+                // Sun click: move clouds and regenerate buildings
+                this.sky.moveClouds();
                 this.generateBuildings();
             }
             this.render();
