@@ -52,31 +52,35 @@ export class Sky extends SceneElement {
         });
     }
 
-    displaySun(ctx: CanvasRenderingContext2D): void {
-        // Draw sun
+    displaySun(ctx: CanvasRenderingContext2D): void 
+    {
+        // draw sun
         ctx.fillStyle = 'yellow';
         ctx.beginPath();
         ctx.arc(this.sun.x, this.sun.y, this.sun.radius, 0, Math.PI * 2);
         ctx.fill();
-
-        // Draw rays
-        const rayLengths = [120, 80]; // Alternate between long and short rays
-        for (let i = 0; i < 8; i++) {
-            const angle = (i * Math.PI) / 4; // Divide full circle into 8 equal parts
-            const length = rayLengths[i % 2];
-            const startX = this.sun.x + Math.cos(angle) * this.sun.radius;
-            const startY = this.sun.y + Math.sin(angle) * this.sun.radius;
-            const endX = this.sun.x + Math.cos(angle) * (this.sun.radius + length);
-            const endY = this.sun.y + Math.sin(angle) * (this.sun.radius + length);
-
+    
+        //  rays
+        const rayLengths = [120, 80]; // alternate between long and short rays
+        for (let i = 0; i < 8; i++) 
+        {
+            const angle = (i * Math.PI) / 4; // divide into 8 equal parts
+            const rayStartX = this.sun.x + Math.cos(angle) * this.sun.radius;
+            const rayStartY = this.sun.y + Math.sin(angle) * this.sun.radius;
+            const rayEndX = this.sun.x + Math.cos(angle) * (this.sun.radius + rayLengths[i % 2]);
+            const rayEndY = this.sun.y + Math.sin(angle) * (this.sun.radius + rayLengths[i % 2]);
+    
             ctx.strokeStyle = 'yellow';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 4; // thick lines
             ctx.beginPath();
-            ctx.moveTo(startX, startY);
-            ctx.lineTo(endX, endY);
+            ctx.moveTo(rayStartX, rayStartY);
+            ctx.lineTo(rayEndX, rayEndY);
             ctx.stroke();
         }
     }
+    
+
+    
 
     display(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = this.color;
