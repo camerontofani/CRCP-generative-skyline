@@ -25,24 +25,24 @@ export class Scene {
         window.addEventListener('resize', () => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            this.render(); // Re-render on resize
+            this.render();
         });
 
         this.sky = new Sky(0, 0, '#87CEEB', this.ctx);
-        this.generateBuildings(); // Generate buildings on initialization
+        this.generateBuildings();
 
-        // Listen for clicks to trigger effects
+        // Click event handler
         window.addEventListener('click', (event: MouseEvent) => {
             const distance = Math.sqrt(
                 Math.pow(event.clientX - this.sky.sun.x, 2) + Math.pow(event.clientY - this.sky.sun.y, 2)
             );
 
             if (distance <= this.sky.sun.radius) {
-                // If the sun is clicked
+                // Sun click: trigger sun rays, regenerate buildings, optionally move clouds
                 this.sky.triggerSunEffect();
-                this.generateBuildings(); // Generate new buildings when the sun is clicked
+                this.generateBuildings();
             }
-            this.render(); // Re-render after the click
+            this.render();
         });
     }
 
