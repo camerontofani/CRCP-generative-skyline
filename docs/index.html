@@ -4,10 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generative Skyline</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #content {
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+        }
+        #startButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #startButton:hover {
+            background-color: #45a049;
+        }
+        canvas {
+            display: none;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+    <div id="content">
+        <h1>Generative Skyline</h1>
+        <p>
+            Welcome to Makayla and Cameron's Generative Skyline! This project is our final for CRCRP 3320, Postmodern Software Design. Our sketch depicts an interactive cityscape during the daytime that changes every time the sun is clicked.
+        </p>
+        <h2>Instructions</h2>
+        <ul>
+            <li>Click on the sun to move the clouds and buildings.</li>
+        </ul>
+        <button id="startButton">View the Skyline</button>
+    </div>
+
     <canvas id="skylineCanvas" width="800" height="600"></canvas>
-    <!-- Use only the type="module" script tag -->
-    <script type="module" src="index.js"></script>
+
+    <script type="module">
+        const contentDiv = document.getElementById('content');
+        const canvas = document.getElementById('skylineCanvas');
+        const startButton = document.getElementById('startButton');
+
+        startButton.addEventListener('click', () => 
+        {
+            contentDiv.style.display = 'none';
+            canvas.style.display = 'block';
+            import('./index.js');
+        });
+    </script>
 </body>
 </html>
+
